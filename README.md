@@ -33,13 +33,13 @@ M-Instagram is a web app that allows users to sign in the application, upload im
 
         $ psql
 
-    Then run below query to create a new database named gallery
+    Then run below query to create a new database named 
 
         # create databases instaphotos;
 5. Create Database migrations
     make migrations on postgres using django
 
-        python3.8 manage.py makemigrations garage
+        python3.8 manage.py makemigrations garage instaphotos
     then run the below command.
 
         python3.8 manage.py migrate
