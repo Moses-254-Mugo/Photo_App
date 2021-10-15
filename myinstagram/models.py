@@ -22,7 +22,7 @@ class Profile (models.Model):
         if created:
             Profile.object.create(user= instance)
 
-    @receiver (post_save, sender=User)
+    @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
         instance.profile.save()
 
@@ -36,12 +36,12 @@ class Profile (models.Model):
     def __str__(self):
         return f'{self.user.username} Profile'
 
-class Image(models.Model):
-    image = models.ImageField(upload_to='image/')
+class Images(models.Model):
+    image = models.ImageField(upload_to='images/')
     name = models.CharField(max_length=200, blank=True)
     caption = models.CharField(max_length=250, blank=True)
     likes = models.ManyToManyField(User, related_name= 'like', blank=True)
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='image')
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='images')
     comment = models.CharField(max_length=200)
 
     def save_image(self):
@@ -59,18 +59,5 @@ class Image(models.Model):
     
     def __str__(self):
         return f'{self.user.name} Image'
-    class Meta:
-        ordering = ["-pk"]
-
-
-
-class Comment(models.Model):
-    comment = models.TextChoices()
-    image = models.ForeignKey(Image, on_delete=models.CASCADE, related_name='comment')
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE,related_name='comment')
-
-
-    def __str__(self):
-        return f'{self.user.name} Comment'
     class Meta:
         ordering = ["-pk"]
