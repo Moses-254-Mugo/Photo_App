@@ -18,3 +18,15 @@ class ProfileTestClass(TestCase):
         profiles = Profile.objects.all()
         self.assertTrue(len(profiles) > 0 )
 
+class ImagesTestClass(TestCase):
+    def setUp(self):
+        # Creating an new Image and saving it
+        self.moses = Profile(name = "moses")
+
+        # Creating a new image and saving it
+        self.new_image  = Images(name = 'game')
+        self.new_image.save()
+
+    def tearDown(self):
+        Profile.objects.all().delete()
+        Images.objects.all().delete()
