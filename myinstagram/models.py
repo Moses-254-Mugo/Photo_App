@@ -20,7 +20,7 @@ class Profile (models.Model):
     @receiver(post_save, sender=User)
     def create_profile(sender, instance, created, **kwargs):
         if created:
-            Profile.object.create(user= instance)
+            Profile.objects.create(user= instance)
 
     @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
