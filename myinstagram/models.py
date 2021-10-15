@@ -61,3 +61,8 @@ class Images(models.Model):
         return f'{self.user.name} Image'
     class Meta:
         ordering = ["-pk"]
+
+    @classmethod
+    def search_by_title(cls,search_term):
+        news = cls.objects.filter(title__icontains=search_term)
+        return news
