@@ -124,3 +124,12 @@ def search_profile(request):
     else:
         message = "You have not searched for any image"
     return render(request, 'search.html', {'message': message})
+
+
+def follow(request,to_follow):
+    if request.method == 'GET':
+        userprofile3 = Profile.objects.get(pk=to_follow)
+        s_follow =  Follow(follower=request.user.profile, followed=userprofile3)
+        s_follow.save()
+        
+        return redirect('user_profile', userprofile3.user.username)
