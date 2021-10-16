@@ -5,7 +5,7 @@ from django.db.models.signals import post_save
 
 # Create your models here.
 class Profile (models.Model):
-    profile_pic = models.ImageField(upload_to='profile/')
+    profile_pic = models.ImageField(upload_to='profile')
     bio = models.CharField(max_length=250, default='My Bio', blank=True)
     name = models.CharField(blank=True, max_length=100)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
@@ -36,13 +36,29 @@ class Profile (models.Model):
     def __str__(self):
         return f'{self.user.username} Profile'
 
+
+class Comments(models.Model):
+    comment = models.TextField()
+    images = models.ImageField(upload_to='images')
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='comments')
+
+    def __str__(self):
+        return f'{self.user.name} Comment'
+
+    class Meta:
+        ordering = ["-pk"]
+
+
+
+    
+
 class Images(models.Model):
-    image = models.ImageField(upload_to='images/')
+    image = models.ImageField(upload_to='images')
     name = models.CharField(max_length=200, blank=True)
     caption = models.CharField(max_length=250, blank=True)
     likes = models.ManyToManyField(User, related_name= 'like', blank=True)
     user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='images')
-    comment = models.CharField(max_length=200)
+    comment = models.ForeignKey(Comments, on_delete=models.CASCADE, max_length=200,  related_name='comments')
 
     def save_image(self):
         self.save()
@@ -66,3 +82,13 @@ class Images(models.Model):
     def search_by_title(cls,search_term):
         news = cls.objects.filter(title__icontains=search_term)
         return news
+
+
+class Follow(models.Model):
+    follower = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='following')
+    followed = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='followers')
+
+
+    def __str__(self):
+        return f'{self.follower} Follow'
+
