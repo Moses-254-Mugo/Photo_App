@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate
 from django.http import request
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
-from myinstagram.models import Follow, Images
+from myinstagram.models import Follow, Images, Profile
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .forms import MyinstagramImageForm, MyinstagramSignUpForm,MyinstagramCommentsForm, MyinstagramUpdateUserForm, MyinstagramUpdateUserProfileForm
@@ -82,15 +82,45 @@ def user_profile(requset, username):
     return render(requset, 'user_profile.html', params)
 
 
-def search_results(request):
+@login_required(login_url='login')
+def postComents(request, id):
+    pic = get_object_or_404(Images, pk=id)
+    is_like = False
+    if pic.likes.filter(id=request.user.id).exists():
+        is_like = True
+    if request.method == 'POST':
+        form = MyinstagramCommentsForm(request.POST)
 
-    if 'article' in request.GET and request.GET["article"]:
-        search_term = request.GET.get("article")
-        searched_articles = Images.search_by_title(search_term)
-        message = f"{search_term}"
-
-        return render(request, 'all-news/search.html',{"message":message,"articles": searched_articles})
-
+        if form.is_valid():
+            save_comment = form.save(commit=False)
+            save_comment.images = pic
+            save_comment.user =request.user.profile
+            save_comment.save()
+            return HttpResponseRedirect(request.path_info)
+        
     else:
-        message = "You haven't searched for any term"
-        return render(request, 'all-news/search.html',{"message":message})
+        form = MyinstagramCommentsForm()
+        params = {
+            'pic': pic,
+            'form': form,
+            'is_like': is_like,
+            'total_likes': pic.total_likes()
+        }
+        return render(request, 'single_post.html', params)
+
+
+@login_required(login_url='login')
+def search_profile(request):
+    if 'search_user' in request.GET and request.GET['search_user']:
+        name = request.GET.get("search_user")
+        results = Profile.search_profile(name)
+        print(results)
+        message = f'name'
+        params = {
+            'results': results,
+            'message': message
+        }
+        return render(request, 'search.html',params)
+    else:
+        message = "You have not searched for any image"
+    return render(request, 'search.html', {'message': message})
