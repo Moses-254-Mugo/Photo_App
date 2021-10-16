@@ -1,7 +1,8 @@
 from django.contrib.auth import authenticate
 from django.http import request
-from django.http.response import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, redirect, render
+from django.http.response import HttpResponseRedirect, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render, render_to_response
+from django.utils import html
 from myinstagram.models import Follow, Images, Profile
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -108,6 +109,24 @@ def postComents(request, id):
         }
         return render(request, 'single_post.html', params)
 
+def like_post(request):
+    image = get_object_or_404(Profile, id=request.POST.get('id'))
+    is_like = False
+    if  image.likes.filter(id=request.user.id).exitst():
+        image.likes.remove(request.user)
+        is_like= False
+    else:
+        image.likes.add(request.user)
+        is_like = False
+
+    params = {
+        'image': image,
+        'is_like': is_like,
+        'total_likes': image.total_likes()
+    }
+    if request.is_ajax():
+        html = render_to_response('like_section.html', params, request=request)
+        return JsonResponse({'form': html})
 
 @login_required(login_url='login')
 def search_profile(request):
