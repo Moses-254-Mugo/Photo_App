@@ -4,7 +4,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 
 # Create your models here.
-class Profile (models.Model):
+class Profile(models.Model):
     profile_pic = models.ImageField(upload_to='profile')
     bio = models.CharField(max_length=250, default='My Bio', blank=True)
     name = models.CharField(blank=True, max_length=100)
