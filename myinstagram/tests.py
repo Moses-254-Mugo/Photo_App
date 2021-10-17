@@ -27,6 +27,11 @@ class ImagesTestClass(TestCase):
         self.new_image  = Images(name = 'game')
         self.new_image.save()
 
+    def test_save_image(self):
+        self.image_test.save_image()
+        image = Images.objects.all()
+        self.assertTrue(len(image) > 0)
+
     def tearDown(self):
         Profile.objects.all().delete()
         Images.objects.all().delete()
