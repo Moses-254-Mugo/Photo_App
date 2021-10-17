@@ -1,12 +1,12 @@
 from django.contrib.auth import authenticate
-from django.http import request
-from django.http.response import HttpResponseRedirect, JsonResponse
+# from django.http import request
+from django.http.response import HttpResponse, Http404
 from django.shortcuts import get_object_or_404, redirect, render
-from django.utils import html
-from myinstagram.models import Follow, Images, Profile
+# from django.utils import html
+from myinstagram.models import  Images, Profile, Comments
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from .forms import MyinstagramImageForm, MyinstagramSignUpForm,MyinstagramCommentsForm, MyinstagramUpdateUserForm, MyinstagramUpdateUserProfileForm
+from .forms import EditProfileForm, NewPostForm, SignUpForm, CommentForm
 
 
 # Create your views here.

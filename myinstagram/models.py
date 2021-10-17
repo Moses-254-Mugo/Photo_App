@@ -1,13 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.dispatch import receiver
-from django.db.models.signals import post_save
 
 # Create your models here.
 class Profile(models.Model):
     profile_pic = models.ImageField(upload_to='image/')
     bio = models.CharField(max_length=250)
-    username = models.CharField(max_length=100, defualt='Your name')
+    username = models.OneToOneField(User,on_delete=models.CASCADE, primary_key=True)
 
    
     def save_profile(self):
@@ -19,12 +17,12 @@ class Profile(models.Model):
     def posts_profiles(self):
         return self.image_set.all()
     
-    def search_profile(cls, name):
-        find_user = User.objects.get(name=name)
-        return find_user
+    # def search_profile(cls, username):
+    #     find_user = User.objects.get(username=username)
+    #     return find_user
 
     def __str__(self):
-        return self.name
+        return self.username
 
     
 
@@ -33,7 +31,7 @@ class Images(models.Model):
     name = models.CharField(max_length=100)
     caption = models.CharField(max_length=250)
     likes = models.IntegerField(default=0)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    username = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def save_image(self):
         self.save()
@@ -62,10 +60,10 @@ class Images(models.Model):
         search_image = cls.objects.filter(name=search_term)
         return search_image
     
-    @classmethod
-    def delete_post(cls, post_id):
-        post = cls.object.filter(pk=post_id)
-        post.delete()
+    # @classmethod
+    # def delete_post(cls, post_id):
+    #     post = cls.object.filter(pk=post_id)
+    #     post.delete()
     
     @classmethod
     def get_all_posts(cls):
@@ -101,11 +99,11 @@ class Comments(models.Model):
 
 
 
-class Follow(models.Model):
-    follower = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='following')
-    followed = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='followers')
+# class Follow(models.Model):
+#     follower = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='following')
+#     followed = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='followers')
 
 
-    def __str__(self):
-        return self.follower
+#     def __str__(self):
+#         return self.follower
 
