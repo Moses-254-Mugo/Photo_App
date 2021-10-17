@@ -1,0 +1,115 @@
+{% extends 'base.html'%}
+{% load bootstrap4 %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <title>Home page (index)</title>
+    <style>
+        body{
+            background-color: lavender;
+        }
+        .container{
+            width: 70%;
+        }
+        .card-group{
+            width: 80%;
+        }
+        button{
+            margin: 10px;
+        }
+        .profile{
+            margin: 15px;
+            /* padding: 10px; */
+        }
+        .profile2{
+            margin: 15px;
+        }
+        .profil_span{
+            margin: 20px;
+            font-size: 20px;
+        }
+        a{
+            text-decoration: none;
+        }
+        #row2{
+            width: 80%;
+            /* border: 1px solid black; */
+            /* margin-left: -4em; */
+        }
+        .suggestions{
+            margin-top: 40px;
+        }
+        .btn-group{
+            margin: 8px;
+        }
+        /* .form-div{
+            background-color: lavender;
+        } */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="card-group">
+                   
+                    
+                    <div class="card">
+                       
+                        
+                        <div class="profile">
+                            <img src="https://d5nunyagcicgy.cloudfront.net/external_assets/hero_examples/hair_beach_v391182663/original.jpeg" alt="" style="border-radius: 50%; width: 80px;height: 80px;"><span class="profil_span"><a href="">Profile_name</a></span>
+                        </div>
+                      <img src="https://static.remove.bg/remove-bg-web/99ab439c6e8e26adfd8c59cee4eb26f0376a9584/assets/start-1abfb4fe2980eabfbbaaa4365a0692539f7cd2725f324f904565a9a744f8e214.jpg" class="card-img-top" alt="..." style="width:100%;">
+                      <div class="card-body">
+                        <div class="row">
+                           
+                            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                                <div class="btn-group mr-2" role="group" aria-label="First group">
+                                    <a href=""><i class="far fa-heart hearticon mx-auto"
+                                        aria-hidden="true" style="width: 20%"></i></a>
+                                </div>
+                                <div class="btn-group mr-2" role="group" aria-label="Second group">
+                                    <a href=""><i class="far fa-comment" style="width: 20%;"></i></a>
+                                
+                                </div>
+                              </div>
+                            
+                        </div>
+                      </div>
+                      <div class="card-footer">
+
+                        <small class="text-muted">Add comment....     Post</small>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="row" id="row2">
+                    <div class="profile2">
+                        <img src="https://d5nunyagcicgy.cloudfront.net/external_assets/hero_examples/hair_beach_v391182663/original.jpeg" alt="" style="border-radius: 50%; width: 80px;height: 80px;"><span class="profil_span"><a href="">Profile_name</a></span>
+                    </div>
+                    <div class="suggestions">
+                        <div class="card border-defualt mb-3" style="max-width: 20rem;">
+                            <div class="card-header bg-transparent border-defualt"><h5>Suggestions For You</h5></div>
+                            <div class="card-body text-defualt">
+                                <img src="https://d5nunyagcicgy.cloudfront.net/external_assets/hero_examples/hair_beach_v391182663/original.jpeg" alt="" style="border-radius: 50%; width: 70px;height: 70px;"><span class=""><a href="">Profile_name</a></span>
+                            </div>
+                          </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+{% endblock %}
