@@ -22,6 +22,14 @@ def index(request):
     return render(request, 'index.html',{'posts':posts})
 
 
+@login_required(login_url='/accounts/login/')
+def profile(request):
+
+    user_post = Images.user_picture(request.user)
+    return render(request, 'profile.html', {'user_post': user_post})
+
+
+
     # pics = Images.objects.all()
     # users = User.objects.exclude(id=request.user.id)
 
