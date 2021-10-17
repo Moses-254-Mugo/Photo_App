@@ -16,7 +16,6 @@ from .forms import EditProfileForm, NewPostForm, SignUpForm, CommentForm
 
 
 @login_required(login_url='/accounts/login/')
-
 def index(request):
     posts = Images.all_images()
     

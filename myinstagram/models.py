@@ -22,7 +22,7 @@ class Profile(models.Model):
     #     return find_user
 
     def __str__(self):
-        return self.username
+        return self.bio
 
     
 
@@ -84,7 +84,7 @@ class Comments(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.user
+        return self.comment
     
     def save_comments(self):
         self.save()
