@@ -1,0 +1,26 @@
+{% extends 'base.html'%}
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8">
+                <div class="card bg-transparent">
+                    <div class="card-header">
+                        <h3>Comment</h3>
+                    </div>
+                    <div class="card-body">
+                        <form  action="{%url 'comment' id%}" method="post">
+                            {%csrf_token%}
+                        
+                            {% bootstrap_form form %}
+                            <input type="submit" value="Subscribe">
+                            <button type="submit"  class="btn btn-outline-danger">Submit</button>
+                          </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2"></div>
+        </div>
+    </div>
+{% endblock %}
