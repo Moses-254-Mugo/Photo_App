@@ -9,16 +9,18 @@ from django.contrib.auth.models import User
 from .forms import EditProfileForm, NewPostForm, SignUpForm, CommentForm
 
 
-# Create your views here.
+# #Create your views here.
 # @login_required(login_url='/accounts/login/')
 # def welcome(request):
 #     return render(request, 'welcome.html')
 
 
-# @login_required(login_url='/accounts/login/')
+@login_required(login_url='/accounts/login/')
+
 def index(request):
-    all_images = Images.all_images()
-    return render(request, 'index.html',{'all_images':all_images})
+    posts = Images.all_images()
+    
+    return render(request, 'index.html',{'posts':posts})
 
 
     # pics = Images.objects.all()

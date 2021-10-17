@@ -4,19 +4,21 @@
 
   <div class="row">
     {% if articles%}
-      <h2>Found {{ articles|length }} of searched term {{message}}</h2>
+      <h2> {{image|length }} Image found for  searched term {{message}}</h2>
     {% else %}
-      <h2> Found 0 articles for the search term {{message}}</h2>
+      <h2> No Image found for the search term {{message}}</h2>
     {% endif %}
 
   </div>
 
   <div class="row">
 
-  {% if articles %}
-    {% for article in articles %}
+  {% if image %}
+    {% for img in image %}
       <div class="col-sm-6 col-md-3">
-          <h1>{{article.title}}</h1>
+          <h1>{{img.name}}</h1>
+          <img src="{{img.image.url}}" alt=".." width="450px">
+          <h3>{{img.caption}}</h3>
       </div>
     {% endfor %}
   {% endif %}
