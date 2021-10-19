@@ -16,7 +16,9 @@ import dj_database_url
 from decouple import config,Csv
 import cloudinary_storage
 
-
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -70,6 +72,7 @@ INSTALLED_APPS = [
     'bootstrap4',
     'crispy_forms',
     'cloudinary_storage',
+    'cloudinary',
 
 ]
 
@@ -170,6 +173,12 @@ CLOUDINARY_STORAGE={
   "API_KEY" : "548958647683456", 
   "API_SECRET " : "iIoM62bAS1XfPqWBF78L19G8Yt4" 
 }
+
+cloudinary.config( 
+  cloud_name = "mosejoan", 
+  api_key = "548958647683456", 
+  api_secret = "iIoM62bAS1XfPqWBF78L19G8Yt4" 
+)
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 

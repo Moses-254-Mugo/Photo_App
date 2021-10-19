@@ -1,10 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
+from cloudinary.models import CloudinaryField
 
 # Create your models here.
 class Profile(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
-    image = models.ImageField(upload_to ='profile_pics')
+    image = CloudinaryField('image')
     
 
     def __str__(self):
@@ -13,7 +14,7 @@ class Profile(models.Model):
 
 class Post(models.Model):
     author = models.ForeignKey('auth.user',on_delete=models.CASCADE,related_name='author')
-    image = models.ImageField(blank = True,null=True)
+    image = CloudinaryField('image')
     caption = models.TextField()
     liked = models.ManyToManyField(User, default=None,blank= True,related_name='liked')
 
