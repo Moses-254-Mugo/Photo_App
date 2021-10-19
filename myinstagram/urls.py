@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.urls import path
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -6,17 +7,17 @@ from django.conf.urls.static import static
 
 urlpatterns=[
     
-    url(r'^$',views.index,name = 'timeline'),
-    url(r'^search/', views.results_search, name='search_results'),
-    url(r'^profileupdae/$', views.update_prof, name='update_profile'),
-    url(r'^comments/<int:id>/', views.comments, name='comments'),
-    url(r'^singlepost/(\d+)', views.single_post, name='single_post'),
-    url(r'^logout/$',views.request_logout,name ='logout'),
-    url(r'^post/<int:post_id>/like',views.add_like,name ='schedule'),
-
-    # url('^$',views.welcome,name = 'welcome'),
-    
-    #
+    path('',views.index,name = 'index'),
+    path('new/', views.create_post, name='post_create'),
+    path('comments/<int:pk>/', views.comment_create, name='comments_list'),
+    path('newpost/', views.create_post, name='newpost'),
+    path('search_results/',views.search_results, name='search_results'),
+    path('like/', views.like_post, name='like-post'),
+    path('profile/', views.profile, name='profile'),
+    path('register/',views.registerPage,name='register'),
+    path('login/',views.loginPage,name='login'),
+    path('user/',views.logoutUser,name='logout'),
 ]
 if settings.DEBUG:
     urlpatterns+= static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+    urlpatterns+= static(settings.STATIC_URL, document_root = settings.STATIC_ROOT)

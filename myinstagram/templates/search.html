@@ -1,27 +1,42 @@
-{%extends 'base.html'%} 
+{% extends 'base.html' %}
 {% block content %}
+
 <div class="container">
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6">
+        {% if categories %}
 
-  <div class="row">
-    {% if articles%}
-      <h2> {{image|length }} Image found for  searched term {{message}}</h2>
-    {% else %}
-      <h2> No Image found for the search term {{message}}</h2>
-    {% endif %}
+      {% for post in categories %}
+        <div class="">
+          <h1 class="text-center">Search Results...</h1>
+          <hr>
+            <div class="row m-1 mb-3">
 
-  </div>
-
-  <div class="row">
-
-  {% if image %}
-    {% for img in image %}
-      <div class="col-sm-6 col-md-3">
-          <h1>{{img.name}}</h1>
-          <img src="{{img.image.url}}" alt=".." width="450px">
-          <h3>{{img.caption}}</h3>
+                <div class="card  ">
+                    <img  class="image-thumbnail img-fluid mt-3" src="{{post.image.url}}" alt="Card image cap">
+                    <h5 class="centered"><b>Author:</b>{{post.author}}</h5>
+                    <div class="card-body">
+                        <p class="card-text"><b>Caption: </b> {{post.caption}}</p>
+                    </div>
+                  </div>
+            </div>
+        </div>
+        {% endfor %}
+        {%endif%}
+      
       </div>
-    {% endfor %}
-  {% endif %}
-  </div>
-</div>
-{% endblock %}
+      <div class="col-sm3"></div>
+    </div>
+    </div>
+  <style>
+    body{
+      background-color: lavender;
+      font-family: 'Times New Roman', Times, serif;
+    }
+    .card{
+      padding: 10px;
+    }
+  </style>
+
+{%endblock%}

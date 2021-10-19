@@ -1,113 +1,165 @@
-from typing import Reversible
 from django.contrib.auth import authenticate
 from django.core.checks import messages
 from django.http.response import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
-from myinstagram.models import  Images, Profile, Comments
+from myinstagram.models import  Post, Profile, Comment, Like
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from .forms import EditProfileForm, NewPostForm, SignUpForm, CommentForm
-from django.contrib.auth import logout
+from .forms import  PostForm, CommentForm,ProfileUpdateForm,UserUpdateForm,CreateUserForm
+from django.contrib.auth import logout,login
+from django.contrib import messages
 
 
-# #Create your views here.
-# @login_required(login_url='/accounts/login/')
-# def welcome(request):
-#     return render(request, 'welcome.html')
 
 
+#Create your views here.
 @login_required(login_url='/accounts/login/')
 def index(request):
-    posts = Images.all_images()
+    posts = Post.objects.all()
+    user = request.user
     
-    return render(request, 'index.html',{'posts':posts})
+    return render(request, 'index.html',{'posts':posts,'user': user})
 
 
 @login_required(login_url='/accounts/login/')
+def search_results(request):
+    if 'author' in request.GET and request.GET["author"]:
+        search_term = request.GET.get("author")
+        searched_articles = Post.search_category(search_term)
+        message = f"{search_term}"
+        return render(request, 'search.html',{"message":message,"categories": searched_articles})
+    else:
+        message = "You haven't searched for any term"
+        return render(request, 'search.html',{"message":message})
+
+@login_required(login_url='/accounts/login/')
+def create_post(request):
+    current_user = request.user
+    if request.method == "POST":
+        form = PostForm(request.POST,request.FILES)
+        if form.is_valid:
+            post = form.save(commit= False)
+            post.author = current_user
+            post.save()
+        return redirect('post_list')
+    else:
+        form = PostForm()
+    return render(request,'create_post.html',{'form':form})
+
+
+@login_required(login_url='/accounts/login/')
+def comment_create(request,pk):
+    post = Post.objects.get(pk = pk)
+    form = CommentForm(request.POST,instance=post)
+    if request.method == "POST":
+        if form.is_valid():
+            post = request.user.username
+            comment = form.cleaned_data['comment']
+            moo = Comment(post = post,comment =comment)
+            moo.save()
+            return redirect('index')
+        else:
+            print('form is invalid')
+    else:
+        form = CommentForm
+    context = {
+        'form':form
+    }
+    return render(request,'comment.html',context)
+
+@login_required(login_url='login')
+def create_post(request):
+    current_user = request.user
+    if request.method == "POST":
+        form = PostForm(request.POST,request.FILES)
+        if form.is_valid:
+            post = form.save(commit= False)
+            post.author = current_user
+            post.save()
+        return redirect('index')
+    else:
+        form = PostForm()
+    return render(request,'new_post.html',{'form':form})
+
+
+
+
+def like_post(request):
+    user = request.user
+    if request.method == 'POST':
+        post_id = request.POST.get('post_id')
+        phone_post = Post.objects.get(id= post_id)
+        if user in phone_post.liked.all():
+            phone_post.liked.remove(user)
+        else:
+            phone_post.liked.add(user)
+        like, created = Like.objects.get_or_create(user=user, post_id = post_id)
+        if not created:
+            if like.value == 'Like':
+                like.value = 'Unlike'
+            else:
+                like.value = 'Like'
+        like.save()
+    return redirect('index')
+
+
 def profile(request):
-
-    user_post = Images.user_picture(request.user)
-    return render(request, 'profile.html', {'user_post': user_post})
-
-@login_required(login_url='/accounts/login/')
-def results_search(request):
-    if 'image' in request.GET and request.GET['image']:
-        search_term = request.GET.get('image')
-        search_pics = Images.search_image(search_term)
-        messages = f'{search_term}'
-        
-
-        return render(request, 'search.html', {'messages':messages, 'image':search_pics })
+    user = request.user
+    user = Profile.objects.get_or_create(user= request.user)
+    
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = ProfileUpdateForm(request.POST,request.FILES,instance=request.user.profile)                         
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            messages.success(request, f'Your account has been updated successfully!')
+            return redirect('profile')
 
     else:
-        message = "You've not searched anything."
-        return render(request, 'search.html', {'message':message})
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.profile)
 
+    context = {
+        'u_form': u_form,
+        'p_form': p_form,
+        'user': user
 
-@login_required(login_url='/accounts/login/')
-def update_prof(request):
+    }
 
-    if request.method=='POST':
-        form = EditProfileForm(request.POST,request.FILES)
+    return render(request, 'profile.html', context)
+
+def registerPage(request):
+    form = CreateUserForm()
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('profile')
-        
-    else:
-        form = EditProfileForm(instance=request.user)
-    return render(request, 'update_profile.html',{'form':form})
+            user = form.cleaned_data.get('username')
+            messages.success(request,'Account was created for ' + user)
+            return redirect('login')
 
 
-@login_required(login_url='/accounts/login/')
-def comments(request, id):
-    id=id
-    if request.method=='POST':
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(comment=False)
-            comment.user = request.user
-            img = Images.objects.get(id=id)
-            comment.image_id= img
-            comment.save()
-            return redirect('update')
+    context = {'form': form}
+    return render(request,'registraion/registration_form.html',context)
 
+def loginPage(request):
+    if request.method == 'POST':
+        username=request.POST.get('username')
+        password=request.POST.get('password')
+        user = authenticate(request,username = username,password= password)
+        if user is not None:
+            login(request,user)
+            return redirect('index')
+            
         else:
-            image_id = id
-            messages.Info(request, 'Fill all the fields correctly')
-            return render('comment', id=image_id)
-    else:
-        id=id
-        form = CommentForm()
-        return render(request, 'comment.html', {'form':form, 'id': id})
+            messages.info(request,'Username or password is inorrect')
+            
+
+    context = {}
+    return render(request,'registration/login.html',context)
 
 
-@login_required(login_url='/accounts/login/')
-def single_post(request, id):
-
-    posts = Images.objects.get(id=id)
-    comments = Comments.objects.filter(image_id = id)
-    return render(request, 'single_post.html', {'posts':posts, 'comments':comments})
-
-
-
-@login_required(login_url='/accounts/login/')
-def request_logout(request):
+def logoutUser(request):
     logout(request)
-    return redirect('update')
-
-@login_required(login_url='/accounts/login/')
-def add_like(request, post_id):
-    post = Images.objects.filter(pk=post_id).first()
-    post.like += 1
-    post.save()
-    all_post = Images. all_images()
-    context = {
-        'picture':all_post,
-    }
-    return render(request, 'index.html', context)
-
-@login_required(login_url='/accounts/login/')
-def like_post(request,pk):
-    post= get_object_or_404(Images, id=request.POST.get('post_id'))
-    post.like.add(request.user) 
-    return HttpResponseRedirect(Reversible('singlepost', args=[str(pk)]))
+    return redirect('login')

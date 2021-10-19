@@ -1,26 +1,43 @@
-{% extends 'base.html'%}
+{% extends 'base.html' %}
 {% block content %}
-
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-2"></div>
-            <div class="col-sm-8">
-                <div class="card bg-transparent">
-                    <div class="card-header">
-                        <h3>Comment</h3>
-                    </div>
-                    <div class="card-body">
-                        <form  action="{%url 'comment' id%}" method="post">
-                            {%csrf_token%}
-                        
-                            {% bootstrap_form form %}
-                            <input type="submit" value="Subscribe">
-                            <button type="submit"  class="btn btn-outline-danger">Submit</button>
-                          </form>
-                    </div>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <section class="section">
+                <div class="container">
+                    <div class="columns is-mobile is-multiline is-centered">
+                        <form action="" class="frm" method="POST">
+                          {% csrf_token %}
+                          {{form.as_p}}
+                        <input type="submit" class="btn btn-primary" name="submit">
+                        </form>
                 </div>
-            </div>
-            <div class="col-sm-2"></div>
+                </div>
+            </section>
         </div>
+        <div class="col-sm"></div>
     </div>
-{% endblock %}
+</div>
+<style>
+    body{
+        background-color: lavender;
+    }
+    .frm{
+        margin-top: 30px;
+        text-align: center;
+        padding: 20px;
+        border: none;
+        box-shadow: 2px 2px 6px #ccc;
+        background-color: lemonchiffon;
+    }
+    .frm:hover{
+        box-shadow: 2px 2px 6px #000;
+    }
+</style>
+  {%endblock%}
+
+
+
+
+

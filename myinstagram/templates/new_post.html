@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{%load crispy_forms_tags%}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <section class="section">
+                <div class="container">
+                    <div class="columns is-mobile is-centered">
+                        <div class="column is-half">
+                    <div class="card">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    {% crispy form %}
+                    {% csrf_token %}
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+</div>
+<style>
+    .panel-body{
+        
+        border:none;
+        border-radius: 10px;
+        padding: 30px;
+        text-align: center;
+    }
+    .section{
+        margin-top: 30px;
+    }
+    body{
+        background-color: lavender;
+    }
+</style>
+{% endblock %}
